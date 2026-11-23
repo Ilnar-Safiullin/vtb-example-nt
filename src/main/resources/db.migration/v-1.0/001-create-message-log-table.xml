@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd"
+                   logicalFilePath="db.migration/v-1.0/001-create-message-log-table.xml">
+
+    <changeSet id="001-create-message-log-table" author="Safiullin Ilnar">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="message_log"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="message_log" remarks="Таблица входящих сообщений из Kafka">
+            <column name="msg_uuid" type="UUID" remarks="UUID сообщения (первичный ключ)">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_message_log_msg_uuid"/>
+            </column>
+            <column name="head" type="BOOLEAN" remarks="Флаг head из сообщения">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_rq" type="BIGINT" remarks="Время чтения сообщения из Kafka (UNIX)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>
